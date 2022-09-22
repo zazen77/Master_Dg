@@ -1,0 +1,94 @@
+Week 7
+Evaluate the Isochrone Directivity Parameter(IDP)
+% clc
+% clear all
+h = 10;
+
+a1x = -24
+a1y = 30
+a2x = -20
+a2y = 40
+as = sqrt((a1x)^2 + (a1y)^2)
+aRrup = sqrt((a1x-a2x)^2 + (a1y-a2y)^2)
+aRhyp = sqrt((a2x)^2 + (a2y)^2 + 10^2)
+aRt = 0.9
+aRu = 0.3
+aD = sqrt((a1x)^2 + (a1y)^2 + 10^2)
+
+b1x = -80/41
+b1y = -5/4 * b1x
+b2x = 20
+b2y = 20
+bs = sqrt((b1x)^2 + (b1y)^2)
+bRrup = sqrt((b1x-b2x)^2 + (b1y-b2y)^2)
+bRhyp = sqrt((b2x)^2 + (b2y)^2 + 10^2)
+bRt = 0.1
+bRu = 1
+bD = 10
+
+Calculate AIDP
+cbar = (1/0.8 - (aRhyp - aRrup)/aD )^(-1)
+C = (min(cbar, 2.45)-0.8) / (2.45 - 0.8)
+S = log(min(75,max(as,h)))
+ARri = max(sqrt(aRu^2 + aRt^2),0.2)
+AIDP = C * S * ARri
+Calculate BIDP
+cbar = (1/0.8 - (bRhyp - bRrup)/bD )^(-1)
+C = (min(cbar, 2.45)-0.8) / (2.45 - 0.8)
+S = log(min(75,max(bs,h)))
+BRri = max(sqrt(bRu^2 + bRt^2),0.2)
+BIDP = C * S * BRri
+2. estimate and plot the median response spectrum for this earthquake for Sites A and B.
+% site A
+A = bssa14(6.5,760,aRrup,2,1,0);
+
+% site B
+B = bssa14(6.5,760,bRrup,2,1,0);
+
+
+M = 6.5;
+period = A(:,1);
+3. Calculate adjustments to the spectra from (2) using the Spudich and Chiou model shown in Spudich et al. (2013).
+IDPbar
+a = 1.192885;
+b = 0.909248;
+c = 0.155513;
+z = 0;
+aIDPbar = a + b/(cosh(c*max(aRrup - z,0)))
+bIDPbar = a + b/(cosh(c*max(bRrup - z,0)))
+qMT
+C4 = -1.1736;
+C5 = 0.2971;
+g = 0.6132;
+qMT = -(log10(period) - (C4 + C5*M)).^2/(2*g^2);
+bMT
+C2 = 0.0823;
+C3 = 0.1665;
+C1 = 5.7;
+bMT = (C2 + C3*max(M-C1,0))*exp(qMT);
+frRRR Distance Taper
+afrRRR = max(0,1-max(0,aRrup - 40)/30)
+bfrRRR = max(0,1-max(0,bRrup - 40)/30)
+fD
+afD = afrRRR*bMT*(AIDP-aIDPbar);
+bfD = bfrRRR*bMT*(BIDP-bIDPbar);
+Calculate
+% site A
+A1 = bssa14(6.5,760,aRrup,2,1,0);
+A = Dirbssa14(6.5,760,aRrup,2,1,0,1);
+
+% site B
+B1 = bssa14(6.5,760,bRrup,2,1,0);
+B = Dirbssa14(6.5,760,bRrup,2,1,0,2);
+
+
+Y1 = A1(:,3);
+Y2 = A(:,3);
+Y3 = B1(:,3);
+Y4 = B(:,3);
+
+loglog(period,Y1,'r',period,Y2,'--r',period,Y3,'g',period,Y4,'--g')
+legend('A','Adir','B','Bdir')
+xlabel('Period')
+ylabel('Spectral Acceleration')
+grid on
