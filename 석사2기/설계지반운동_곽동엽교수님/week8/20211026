@@ -1,0 +1,435 @@
+1
+% % clc
+% clear all
+
+b = 0.9;
+beta = b * log(10);
+
+x = (5 : 0.01 : 7);
+y = (beta*exp(-beta*(x-5)))/(1-exp(-beta*(7-5)));
+
+plot(x,y)
+xlim([4.5 7.5])
+
+%세로선
+
+
+
+fun = @(x) (beta*exp(-beta*(x-5)))/(1-exp(-beta*(7-5)));
+% x=0부터 x=Inf까지의 범위에 대해 적분을 계산합니다.
+
+bin1 = integral(fun,5,5.5)
+bin2 = integral(fun,5.5,6)
+bin3 = integral(fun,6,6.5)
+bin4 = integral(fun,6.5,7)
+
+total = bin1 + bin2 + bin3 + bin4
+
+
+2
+
+% Lrup
+%M = 5.25
+Lrup1 = round(10^(0.74*5.25 - 3.55),0)
+%M = 5.75
+Lrup2 = round(10^(0.74*5.75 - 3.55),0)
+%M = 6.25
+Lrup3 = round(10^(0.74*6.25 - 3.55),0)
+%M = 6.75
+Lrup4 = round(10^(0.74*6.75 - 3.55),0)
+Lrup = [Lrup1
+Lrup2
+Lrup3
+Lrup4];
+
+3
+% f의 bin에 따른 midpoint 좌표
+biny = 0;
+% bin1 x
+mbin1x = 5;
+mbin2x = 15;
+mbin3x = 25;
+mbin4x = 35;
+mbin5x = 45;
+mbin6x = 55;
+
+%Rjb11
+Rjb11 = sqrt(10^2 + (20-6)^2);
+Rjb12 = sqrt(10^2 + (20-16)^2);
+Rjb13 = sqrt(10^2 + (20-24)^2);
+Rjb14 = sqrt(10^2 + (20-34)^2);
+Rjb15 = sqrt(10^2 + (20-44)^2);
+Rjb16 = sqrt(10^2 + (20-54)^2);
+
+%Rjb21
+Rjb21 = sqrt(10^2 + (20-7.5)^2);
+Rjb22 = sqrt(10^2 + (20-17.5)^2);
+Rjb23 = sqrt(10^2 + (20-22.5)^2);
+Rjb24 = sqrt(10^2 + (20-32.5)^2);
+Rjb25 = sqrt(10^2 + (20-42.5)^2);
+Rjb26 = sqrt(10^2 + (20-52.5)^2);
+
+%Rjb31
+Rjb31 = sqrt(10^2 + (20-12)^2);
+Rjb32 = sqrt(10^2 + (20-20)^2);
+Rjb33 = sqrt(10^2 + (20-20)^2);
+Rjb34 = sqrt(10^2 + (20-29)^2);
+Rjb35 = sqrt(10^2 + (20-39)^2);
+Rjb36 = sqrt(10^2 + (20-49)^2);
+
+%Rjb41
+Rjb41 = sqrt(10^2 + (20-20)^2);
+Rjb42 = sqrt(10^2 + (20-20)^2);
+Rjb43 = sqrt(10^2 + (20-20)^2);
+Rjb44 = sqrt(10^2 + (20-21)^2);
+Rjb45 = sqrt(10^2 + (20-31)^2);
+Rjb46 = sqrt(10^2 + (20-32)^2);
+
+Rjb1  = [Rjb11
+Rjb12
+Rjb13
+Rjb14
+Rjb15
+Rjb16
+]
+
+Rjb2  =[Rjb21
+Rjb22
+Rjb23
+Rjb24
+Rjb25
+Rjb26
+]
+
+Rjb3  =[Rjb31
+Rjb32
+Rjb33
+Rjb34
+Rjb35
+Rjb36
+]
+
+Rjb4  =[Rjb41
+Rjb42
+Rjb43
+Rjb44
+Rjb45
+Rjb46]
+
+% Magnitude 5.25
+L525a = zeros(60000,1);
+    
+for i = 1 : 1 : 6
+    L525p = zeros(60000,1);
+    xx = (i*2-1)*5;
+    LR = Lrup(1);
+    L5251 = (xx - (LR/2)) * 1000;
+    L5252 = (xx + (LR/2)) * 1000;
+    xrange = (0.001 : 0.001 : 60);
+    
+    L525p(L5251 : L5252) = 1/6 / LR;
+    L525a = L525a + L525p;
+    plot(xrange,L525a)
+    xlim([0 60])
+    ylim([0 0.1])
+end
+
+L525b = zeros(60000,1);
+for i = 1 : 1 : 6
+    L525p = zeros(60000,1);
+    xx = (i*2-1)*5;
+    LR = Lrup(2);
+    L5251 = (xx - (LR/2)) * 1000;
+    L5252 = (xx + (LR/2)) * 1000;
+    xrange = (0.001 : 0.001 : 60);
+    
+    L525p(L5251 : L5252) = 1/6 / LR;
+    L525b = L525b + L525p;
+    plot(xrange,L525b)
+    xlim([0 60])
+    ylim([0 0.1])
+end
+
+L525c = zeros(60000,1);
+for i = 1 : 1 : 6
+    L525p = zeros(60000,1);
+    xx = (i*2-1)*5;
+    LR = Lrup(3);
+    L5251 = (xx - (LR/2)) * 1000;
+    L5252 = (xx + (LR/2)) * 1000;
+    
+    if L5252 > 60000
+        L5251 = (60-LR) * 1000;
+        L5252 = 60000;
+        
+    elseif L5251 < 0
+        L5251 = 1;
+        L5252 = (LR) * 1000;
+    end
+    
+    xrange = (0.001 : 0.001 : 60);
+    L525p(L5251 : L5252) = 1/6/ LR;
+
+    L525c = L525c + L525p;
+    plot(xrange,L525c)
+    xlim([0 60])
+    ylim([0 0.1])
+end
+
+L525d = zeros(60000,1);
+for i = 1 : 1 : 6
+    L525p = zeros(60000,1);
+    xx = (i*2-1)*5;
+    LR = Lrup(4);
+    L5251 = (xx - (LR/2)) * 1000;
+    L5252 = (xx + (LR/2)) * 1000;
+    
+    if L5252 > 60000
+        L5251 = (60-LR) * 1000;
+        L5252 = 60000;
+        
+    elseif L5251 < 0
+        L5251 = 1;
+        L5252 = (LR) * 1000;
+    end
+    
+    xrange = (0.001 : 0.001 : 60);
+    L525p(L5251 : L5252) = 1/6/ LR;
+
+    L525d = L525d + L525p;
+    plot(xrange,L525d)
+    xlim([0 60])
+    ylim([0 0.1])
+end
+
+4
+rup11 = PGA_bssa14(5.25,760,Rjb1(1),2,1,0);
+rup12 = PGA_bssa14(5.25,760,Rjb1(2),2,1,0);
+rup13 = PGA_bssa14(5.25,760,Rjb1(3),2,1,0);
+rup14 = PGA_bssa14(5.25,760,Rjb1(4),2,1,0);
+rup15 = PGA_bssa14(5.25,760,Rjb1(5),2,1,0);
+rup16 = PGA_bssa14(5.25,760,Rjb1(6),2,1,0);
+
+rup21 = PGA_bssa14(5.75,760,Rjb2(1),2,1,0);
+rup22 = PGA_bssa14(5.75,760,Rjb2(2),2,1,0);
+rup23 = PGA_bssa14(5.75,760,Rjb2(3),2,1,0);
+rup24 = PGA_bssa14(5.75,760,Rjb2(4),2,1,0);
+rup25 = PGA_bssa14(5.75,760,Rjb2(5),2,1,0);
+rup26 = PGA_bssa14(5.75,760,Rjb2(6),2,1,0);
+
+rup31 = PGA_bssa14(5.75,760,Rjb3(1),2,1,0);
+rup32 = PGA_bssa14(5.75,760,Rjb3(2),2,1,0);
+rup33 = PGA_bssa14(5.75,760,Rjb3(3),2,1,0);
+rup34 = PGA_bssa14(5.75,760,Rjb3(4),2,1,0);
+rup35 = PGA_bssa14(5.75,760,Rjb3(5),2,1,0);
+rup36 = PGA_bssa14(5.75,760,Rjb3(6),2,1,0);
+
+rup41 = PGA_bssa14(5.75,760,Rjb4(1),2,1,0);
+rup42 = PGA_bssa14(5.75,760,Rjb4(2),2,1,0);
+rup43 = PGA_bssa14(5.75,760,Rjb4(3),2,1,0);
+rup44 = PGA_bssa14(5.75,760,Rjb4(4),2,1,0);
+rup45 = PGA_bssa14(5.75,760,Rjb4(5),2,1,0);
+rup46 = PGA_bssa14(5.75,760,Rjb4(6),2,1,0);
+
+rup = [
+    rup11(1,:)
+    rup12(1,:)
+    rup13(1,:)
+    rup14(1,:)
+    rup15(1,:)
+    rup16(1,:)
+    rup21(1,:)
+    rup22(1,:)
+    rup23(1,:)
+    rup24(1,:)
+    rup25(1,:)
+    rup26(1,:) 
+    rup31(1,:)
+    rup32(1,:)
+    rup33(1,:)
+    rup34(1,:)
+    rup35(1,:)
+    rup36(1,:) 
+    rup41(1,:)
+    rup42(1,:)
+    rup43(1,:)
+    rup44(1,:)
+    rup45(1,:)
+    rup46(1,:)
+        ]
+
+5
+z = 0.1
+% epsilon = (ln(z) - PGA)) / Std
+e = (log(0.1) - rup(:,2)) ./ rup(:,4)
+
+pd = makedist('Normal','mu',0,'sigma',1);
+pga = 1 - cdf(pd,e);
+
+PM = [
+bin1
+bin1
+bin1
+bin1
+bin1
+bin1
+bin2
+bin2
+bin2
+bin2
+bin2
+bin2
+bin3
+bin3
+bin3
+bin3
+bin3
+bin3
+bin4
+bin4
+bin4
+bin4
+bin4
+bin4];
+
+PH = [
+L525a(5000)
+L525a(15000)
+L525a(25000)
+L525a(35000)
+L525a(45000)
+L525a(55000)
+L525b(5000)
+L525b(15000)
+L525b(25000)
+L525b(35000)
+L525b(45000)
+L525b(55000)
+L525c(5000)
+L525c(15000)
+L525c(25000)
+L525c(35000)
+L525c(45000)
+L525c(55000)
+L525d(5000)
+L525d(15000)
+L525d(25000)
+L525d(35000)
+L525d(45000)
+L525d(55000)
+];
+
+PMHPGA = PH .* PM .* pga
+
+% P(IM>z|Ei)
+PIM = sum(PMHPGA)
+
+lambda = 0.03;
+
+nu = PIM* lambda;
+dt = 1;
+%poisson
+pois = 1-exp(-nu*dt)
+
+6
+poi = zeros(1000,1);
+for m = 0.001 : 0.001 : 1
+    z = m;
+    % epsilon = (ln(z) - PGA)) / Std
+    e = (log(z) - rup(:,2)) ./ rup(:,4);
+    
+    pd = makedist('Normal','mu',0,'sigma',1);
+    pga = 1 - cdf(pd,e);
+    
+    PM = [
+    bin1
+    bin1
+    bin1
+    bin1
+    bin1
+    bin1
+    bin2
+    bin2
+    bin2
+    bin2
+    bin2
+    bin2
+    bin3
+    bin3
+    bin3
+    bin3
+    bin3
+    bin3
+    bin4
+    bin4
+    bin4
+    bin4
+    bin4
+    bin4];
+    
+    PH = [
+    L525a(5000)
+    L525a(15000)
+    L525a(25000)
+    L525a(35000)
+    L525a(45000)
+    L525a(55000)
+    L525b(5000)
+    L525b(15000)
+    L525b(25000)
+    L525b(35000)
+    L525b(45000)
+    L525b(55000)
+    L525c(5000)
+    L525c(15000)
+    L525c(25000)
+    L525c(35000)
+    L525c(45000)
+    L525c(55000)
+    L525d(5000)
+    L525d(15000)
+    L525d(25000)
+    L525d(35000)
+    L525d(45000)
+    L525d(55000)
+    ];
+    
+    PMHPGA = PH .* PM .* pga;
+    
+    % P(IM>z|Ei)
+    PIM = sum(PMHPGA);
+    
+    lambda = 0.03;
+    
+    nu = PIM * lambda;
+    dt = 1;
+    n = round((m * 1000),0);
+    poi(n) = 1-exp(-nu*dt);
+end
+
+xxrange = (0.001 : 0.001 : 1);
+xxrange = transpose(xxrange)
+pgaape = [xxrange poi]
+loglog(xxrange,poi)
+grid on
+xlabel('PGA(g)')
+ylabel('APE')
+
+dt = 50
+p = 0.1
+nu50 = -(log(1-p))/dt
+P50 = 1-exp(-nu50*1)
+
+
+
+7
+pp = PGA_bssa14(6.75,760,10,2,1,0);
+pgamedian = exp(pp(1,2))
+pgamedianstd = exp(pp(1,2) + pp(1,4))
+
+% APE of pgamedium
+APEmedian = 0.000605583
+APEmedianstd = 8.7533*10^-5
+dt = 1 
+nuAPEmedian = -(log(1-APEmedian))/dt
+nuAPEmedianstd = -(log(1-APEmedianstd))/dt
