@@ -1,0 +1,227 @@
+Week 10 
+1. Develop two conditional mean spectra compatible with the UHS at 1.0 and 5.0 sec. Make a plot showing together the mean UHS and the two CMS. Plot should have loglog axes. Describe criteria you would consider in selecting records for response history analyses of buildings having these periods.
+>>T = 1.0
+Data form week 9
+Data set of aks14
+ask14x = [0.01; 0.02; 0.03; 0.05; 0.075; 0.1; 0.15; 0.2; 0.25; 0.3; 
+    0.4; 0.5; 0.75; 1; 1.5; 2; 3; 4; 5; 6; 7.5; 10; ];
+ask14y = [0.9475959; 0.95143634; 0.9333966; 1.0010262; 1.1936357; 
+    1.4386282; 1.9755005; 2.4163144; 2.6602793; 2.732068; 2.4751089;
+    2.0907419; 1.4366877; 1.0761372; 0.7046115; 0.4950722; 0.29736996;
+    0.21108215; 0.16384436; 0.13513193; 0.10686417; 0.076060146; ];
+Data set of aks14-twosided
+ask14ty = [0.79682577; 0.7983998; 0.7786165; 0.8219933; 0.9797582; 
+    1.1780269; 1.6185752; 2.010972; 2.2382061; 2.3257368; 2.1057901; 
+    1.768983; 1.2116945; 0.9005546; 0.5867606; 0.41003224; 0.24826507; 
+    0.17633414; 0.13707829; 0.11338616; 0.089988805; 0.064525835; ];
+Data set of cb14
+cb14x = [0.01; 0.02; 0.03; 0.05; 0.075; 0.1; 0.15; 0.2; 0.25; 0.3; 
+    0.4; 0.5; 0.75; 1; 1.5; 2; 3; 4; 5; 7.5; 10; ];
+cb14y = [0.75321805; 0.7758175; 0.844619; 1.0348433; 1.3093021; 
+    1.505303; 1.6582663; 1.6955918; 1.7609165; 1.8700777; 1.8783886;
+    1.7885325; 1.5123502; 1.2118988; 0.78346395; 0.5519147; 0.34943354;
+    0.22945735; 0.16569412; 0.07633727; 0.040708333; ];
+Data set of cb14-twosided
+cb14ty = [0.6813444; 0.70119447; 0.7665483; 0.9269162; 1.14302;
+    1.2976012; 1.4243844; 1.4677666; 1.5438503; 1.6287737; 1.6554313;
+    1.5835184; 1.3213743; 1.0653296; 0.6866182; 0.48648775; 0.3049865;
+    0.19960155; 0.1427253; 0.0655509; 0.034928787; ];
+Data set of bssa14
+bssa14x = [0.01; 0.02; 0.03; 0.05; 0.075; 0.1; 0.15; 0.2; 0.25; 0.3; 
+    0.4; 0.5; 0.75; 1; 1.5; 2; 3; 4; 5; 7.5; 10; ];
+bssa14y = [1.055397; 1.0518713; 1.1161739; 1.3909864; 1.8363576; 
+    2.1617975; 2.4106646; 2.377457; 2.309729; 2.2645657; 2.0807598;
+    1.9210143; 1.4646665; 1.1555473; 0.70854884; 0.4892181; 0.3076176;
+    0.22516403; 0.17761353; 0.1097209; 0.06868918; ];
+Data set of bssa14-twosided
+bssa14ty = [0.9128473; 0.90921885; 0.9549469; 1.1508161; 1.4923992; 
+    1.7685138; 2.0583222; 2.0953524; 2.0709822; 2.0516772; 1.8867474;
+    1.7290598; 1.3114982; 1.0347885; 0.6337789; 0.43075815; 0.26539406;
+    0.19322747; 0.15304714; 0.096045986; 0.06115537; ];
+Data set of cy14
+cy14x = [0.01; 0.02; 0.03; 0.04; 0.05; 0.075; 0.1; 0.12; 0.15; 0.17; 0.2;
+    0.25; 0.3; 0.4; 0.5; 0.75; 1; 1.5; 2; 3; 4; 5; 7.5; 10; ];
+cy14y = [0.9702208; 0.9867944; 1.0636524; 1.1536331; 1.2698343; 
+    1.5646763; 1.8041672; 1.9711338; 2.1402884; 2.2342973; 2.3607934;
+    2.4665651; 2.4598053; 2.3092046; 2.1279924; 1.6225532; 1.2286419;
+    0.757178; 0.52406144; 0.28246608; 0.16940923; 0.10848042; 0.047634378;
+    0.026323875; ];
+Data set of cy14-twosided
+cy14ty = [0.85734063; 0.8699971; 0.93365324; 1.0104153; 1.0988164;
+    1.3449482; 1.5530379; 1.6807269; 1.8245128; 1.9084064; 2.018428;
+    2.1034374; 2.1062925; 2.0097728; 1.8599434; 1.433602; 1.0914861;
+    0.6742303; 0.46613228; 0.2496493; 0.14738932; 0.09373075; 0.04115127;
+    0.022771275; ];
+Data Response Spectra Curves
+xq = 0.001:0.001:10;
+
+pask14 = pchip(ask14x,ask14y,xq);
+pask14t = pchip(ask14x,ask14ty,xq);
+
+pcb14 = pchip(cb14x,cb14y,xq);
+pcb14t = pchip(cb14x,cb14ty,xq);
+
+bssa14 = pchip(bssa14x,bssa14y,xq);
+bssa14t = pchip(bssa14x,bssa14ty,xq);
+
+cy14 = pchip(cy14x,cy14y,xq);
+cy14t = pchip(cy14x,cy14ty,xq);
+Uniform hazard spectra for the four GMMs
+uhs = zeros(10000,1);
+for i= 1 : 1 : 10000
+    weight = 0.25*0.7.*pask14(i) + ...
+        0.25*0.3.*pask14t(i) + ...
+        0.25*0.7.*pcb14(i) + ...
+        0.25*0.3.*pcb14t(i) + ...
+        0.25*0.7.*bssa14(i) + ...
+        0.25*0.3.*bssa14t(i) + ...
+        0.25*0.7.*cy14(i) + ...
+        0.25*0.3.*cy14t(i);
+    uhs(i) = weight;
+end
+UHS
+% loglog(xq,uhs,'c')
+% ylabel('Spectral Acceleration(g)')
+% xlabel('Period')
+% legend('UHS','Location','southwest')
+% legend('Average','(+)interval','(-)interval')
+
+bssa = PGA_bssa14(7.04468,376,9.782958,2,1,0);
+period = bssa(2:106,1);
+%추출을 위한 period 변형
+per = period.*1000;
+
+lnsa = zeros(105,1);
+for i = 1 : 1 : 105
+    h = per(i,1);
+    lnsa(i) = log(uhs(h,1));
+end
+
+lnsah = bssa(2:106,2);
+sigma = bssa(2:106,4);
+epsil = (lnsa - lnsah)./sigma;
+epsil = epsil(68);
+
+
+targetT = 1;
+ii = zeros(10000,1);
+iii = zeros(10000,1);
+
+for i = 1 : 1 : 10000
+    ii(i) = i*0.001;
+    iii(i) = i;
+end
+
+ik = zeros(10000,1);
+for i = 1 : 1 : 10000
+    i1 = i*0.001;
+    if i1 < 0.189
+        ik(i) = 1;
+    else
+        ik(i) = 0;
+    end
+end
+tmin = zeros(10000,1);
+tmax = zeros(10000,1);
+
+for i = 1: 1: 10000
+    in = i*0.001;
+    if in <= targetT
+        tmin(i) = in;
+        tmax(i) = targetT;
+    else
+        tmin(i) = targetT;
+        tmax(i) = in;
+    end
+end
+
+ro = 1 - cos(pi/2 - (0.395+0.163.*ik.*log(tmin./0.189)).*log(tmax./tmin));
+
+
+roro = zeros(105,1);
+for i = 1 : 1: 105
+    h = per(i,1);
+    roro(i) = ro(h,1);
+end
+plot the graph
+lnsa = exp(lnsa);
+lnsah1 = exp(lnsah);
+Sa = exp(lnsah + sigma.*roro.*epsil);
+
+loglog(period,lnsa,'c',period,lnsah1,'r',period,Sa,'b')
+grid on
+ylabel('Spectral Acceleration(g)')
+xlabel('Period')
+xlim([0.05 10])
+legend('UHS','BSSA14','CMS','Location','southwest')
+>>T = 5.0
+
+bssa = PGA_bssa14(7.6087375,376,21.946173,2,1,0);
+period = bssa(2:106,1);
+%추출을 위한 period 변형
+per = period.*1000;
+
+lnsa = zeros(105,1);
+for i = 1 : 1 : 105
+    h = per(i,1);
+    lnsa(i) = log(uhs(h,1));
+end
+
+lnsah = bssa(2:106,2);
+sigma = bssa(2:106,4);
+epsil = (lnsa - lnsah)./sigma;
+epsil = epsil(95);
+
+targetT = 5;
+ii = zeros(10000,1);
+iii = zeros(10000,1);
+
+for i = 1 : 1 : 10000
+    ii(i) = i*0.001;
+    iii(i) = i;
+end
+
+ik = zeros(10000,1);
+for i = 1 : 1 : 10000
+    i1 = i*0.001;
+    if i1 < 0.189
+        ik(i) = 1;
+    else
+        ik(i) = 0;
+    end
+end
+tmin = zeros(10000,1);
+tmax = zeros(10000,1);
+
+for i = 1: 1: 10000
+    in = i*0.001;
+    if in <= targetT
+        tmin(i) = in;
+        tmax(i) = targetT;
+    else
+        tmin(i) = targetT;
+        tmax(i) = in;
+    end
+end
+
+ro = 1 - cos(pi/2 - (0.395+0.163.*ik.*log(tmin./0.189)).*log(tmax./tmin));
+
+
+roro = zeros(105,1);
+for i = 1 : 1: 105
+    h = per(i,1);
+    roro(i) = ro(h,1);
+end
+plot the graph
+lnsa = exp(lnsa);
+lnsah1 = exp(lnsah);
+Sa2 = exp(lnsah + sigma.*roro.*epsil);
+
+loglog(period,lnsa,'c',period,lnsah1,'r',period,Sa,'b',period,Sa2,'g')
+grid on
+ylabel('Spectral Acceleration(g)')
+xlabel('Period')
+xlim([0.05 10])
+xline(1)
+xline(5)
+legend('UHS','BSSA14','CMS1.0','CMS5.0','Location','southwest')
