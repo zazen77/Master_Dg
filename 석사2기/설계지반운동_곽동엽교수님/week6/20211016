@@ -1,0 +1,125 @@
+Week 6 
+Read Matrix
+% clc
+% clear all
+% function p = bssa14(M,Vs30,Rjb,ftype,region,dz1)
+    Co = readmatrix('BSSA14_Coefficients_071314_Revisedf4_071514.csv');
+    
+Example Data
+    % M
+    M = 6;
+    
+    % region
+    region = 1;
+    
+    % dz1
+    dz1 = 0;
+    
+    % Rjb (km)
+    Rjb = 20;
+    
+    %Vs30 (m/s)
+    Vs301 = 760;
+    Vs302 = 760;
+    Vs303 = 200; 
+    
+    %ftype
+    ftype = 1;
+Coefficients
+    period = Co(:,1);
+    
+    % Magnitude Scaling
+    e0  = Co(:,2);
+    e1	= Co(:,3);
+    e2  = Co(:,4);
+    e3  = Co(:,5);
+    e4  = Co(:,6);
+    e5  = Co(:,7);
+    e6  = Co(:,8);
+    Mh  = Co(:,9);
+    
+    % Distance Scaling
+    c1  = Co(:,10);
+    c2  = Co(:,11);
+    c3  = Co(:,12);
+    Mref= Co(:,13);
+    Rref= Co(:,14);
+    h	= Co(:,15);
+    
+    % Anelastic attenuation
+    Dc3globalCATWNZ = Co(:,16);
+    Dc3ChinaTurkey	= Co(:,17);
+    Dc3ItalyJapan	= Co(:,18);
+    
+    % Linear site term
+    clin= Co(:,19);
+    Vc	= Co(:,20);
+    Vref= Co(:,21);
+    
+    % Ninlinear site term
+    f1	= Co(:,22);
+    f3	= Co(:,23);
+    f4	= Co(:,24);
+    f5	= Co(:,25);
+    
+    % Basin depth
+    f6	= Co(:,26);
+    f7	= Co(:,27);
+    
+    % Aleatory Uncertainty
+    R1	= Co(:,28);
+    R2	= Co(:,29);
+    DfR	= Co(:,30);
+    DfV	= Co(:,31);
+    V1	= Co(:,32);
+    V2	= Co(:,33);
+    phi1= Co(:,34);
+    phi2= Co(:,35);
+    tau1= Co(:,36);
+    tau2= Co(:,37);
+Source Term
+% ftype 
+% 1 = unspecified / 2 = strike slip / 3 = normal slip / 4 = reverse slip
+  if ftype == 1
+        US = 1
+        SS = 0
+        NS = 0
+        RS = 0
+  elseif ftype == 2
+        US = 0
+        SS = 1
+        NS = 0
+        RS = 0
+  elseif ftype == 3
+        US = 0
+        SS = 0
+        NS = 1
+        RS = 0
+  else 
+        US = 0
+        SS = 0
+        NS = 0
+        RS = 1
+  end
+  
+% Calculate the pga
+
+   if   region == 1
+    Dc3 = Dc3globalCATWNZ
+   elseif  region == 2
+    Dc3 = Dc3ChinaTurkey
+   else 
+    Dc3 = Dc3ItalyJapan
+   end
+   
+  R = sqrt(Rjb^2 + (h.^2))
+  
+  Fd1 = (c1 + c2 .* (M - Mref)) .* log(R ./ Rref) + (c3 + Dc3) .* (R - Rref)
+  
+  if M <= Mh
+    Fm1 = e0 .* US + e1 .* SS + e2 .* NS + e3 .* RS + e4 .* (M - Mh) + e5 .* ((M - Mh).^2)
+  else 
+    Fm1 = e0 .* US + e1 .* SS + e2 .* NS + e3 .* RS + e6 .* (M - Mh)
+  end
+  
+  pga4nl = exp(Fm1 + Fd1)
